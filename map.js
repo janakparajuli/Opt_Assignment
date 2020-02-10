@@ -1,11 +1,12 @@
 // 
 // AccesstoAPI 
-var url = "https://opensky-network.org/api/states/all?lamin=25&lomin=-20&lamax=45&lomax=5";
+var url = "https://opensky-network.org/api/states/all?lamin=20&lomin=-20&lamax=40&lomax=5";
 var planeIcon = L.icon({
     iconUrl: 'icons/plane.png',
-    iconSize: [15, 30],
+    iconSize: [50, 50],
     iconAnchor: [10, 20],
     popupAnchor: [1, 1],
+    rotationOrigin: 'center center'
 });
 //Define Functions
 function onEachFeature(feature, layer) {
@@ -81,15 +82,19 @@ var map = L.map('map'),
         container: clusters,
         interval: 10 * 1000,
     }); //.addTo(map);
+L.esri.basemapLayer('Imagery').addTo(map);
+L.esri.basemapLayer('ImageryLabels').addTo(map);
 
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
+// L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+//     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+// }).addTo(map);
 realtime.once('update', function() {
     map.fitBounds(realtime.getBounds(), {
-        maxZoom: 13
+        maxZoom: 15
     });
+
+})
+realtime.on('update', function() {
     clusters.clearLayers();
     clusters.addLayer(realtime);
     console.log(arguments);
