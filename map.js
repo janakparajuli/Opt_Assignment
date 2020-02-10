@@ -3,12 +3,9 @@
 var url = "https://opensky-network.org/api/states/all?lamin=25&lomin=-20&lamax=45&lomax=5";
 var planeIcon = L.icon({
     iconUrl: 'icons/plane.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [15, 30],
     iconAnchor: [10, 20],
     popupAnchor: [1, 1],
-    shadowSize: [15, 30],
-    // iconColor: "green",
 });
 //Define Functions
 function onEachFeature(feature, layer) {
@@ -78,23 +75,12 @@ function getCustomData(success, error) {
 }
 
 var map = L.map('map'),
-    clusters = L.markerClusterGroup().addTo(map),
+    clusters = L.markerClusterGroup({ maxClusterRadius: 40 }).addTo(map),
     realtime = L.realtime(getCustomData, {
         onEachFeature: onEachFeature,
         container: clusters,
         interval: 10 * 1000,
     }); //.addTo(map);
-// debugger;
-// clusters.addLayer(realtime);
-// map.addLayer(clusters);
-realtime.addTo(map);
-// debugger;
-// realtime.on('update', function() {
-//     // debugger;
-//     let clusters = L.markerClusterGroup();
-//     clusters.addLayer(realtime);
-//     map.addLayer(clusters);
-// });
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -104,5 +90,7 @@ realtime.once('update', function() {
     map.fitBounds(realtime.getBounds(), {
         maxZoom: 13
     });
+    clusters.clearLayers();
+    clusters.addLayer(realtime);
     console.log(arguments);
 });
