@@ -1,0 +1,11 @@
+﻿/*CSS for Leaflet map*/
+#map { height: 50em; width: 70em;
+    border: 1px solid #aaa;}
+
+body{
+        padding: 0;
+        margin: 0;
+    }
+html, body, {
+        height: 100%;
+    }
